@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- Paramètres d'encapsulation iOS (Progressive Web App) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ann Lau">
+    
+    <!-- Icône requise pour le raccourci écran d'accueil (fichier à créer) -->
+    <link rel="apple-touch-icon" href="icone-app.png">
+    
+    <title>Ann Lau</title>
+    
+    <style>
+        /* Verrouillage du comportement tactile et du défilement */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Conteneur d'arrière-plan */
+        #slider-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+        
+        /* Conteneur de l'interface utilisateur (à exploiter plus tard) */
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="slider-container"></div>
+
+    <div id="ui-layer">
+        <!-- Les éléments interactifs de l'app seront injectés ici -->
+    </div>
+
+    <script>
+        // Déclaration vectorielle des fichiers source
+        const images = [
+            'Background_Images/photo1.jpg',
+            'Background_Images/photo2.jpg',
+            'Background_Images/photo3.jpg',
+            'Background_Images/photo4.jpg',
+            'Background_Images/photo5.jpg',
+            'Background_Images/photo6.jpg',
+            'Background_Images/photo7.jpg',
+            'Background_Images/photo8.jpg'
+        ];
+        
+        const tempsAffichageMs = 6000;
+        const container = document.getElementById('slider-container');
+        let indexActuel = 0;
+
+        // Génération procédurale du DOM pour les images
+        images.forEach((src, index) => {
+            const div = document.createElement('div');
+            div.className = 'slide';
+            div.style.backgroundImage = `url('${src}')`;
+            if (index === 0) div.classList.add('active');
+            container.appendChild(div);
+        });
+
+        const slides = document.querySelectorAll('.slide');
+
+        function changerImage() {
+            slides[indexActuel].classList.remove('active');
+            indexActuel = (indexActuel + 1) % slides.length;
+            slides[indexActuel].classList.add('active');
+        }
+
+        // Lancement de l'intervalle si le tableau contient plus d'une entrée
+        if (images.length > 1) {
+            setInterval(changerImage, tempsAffichageMs);
+        }
+    </script>
+</body>
+</html>
